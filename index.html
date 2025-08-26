@@ -183,6 +183,26 @@
                 transform: translateY(-50%) translateX(0);
             }
         }
+
+        /* Lightbox */
+        #lightbox {
+            display: none;
+            position: fixed;
+            z-index: 10;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            justify-content: center;
+            align-items: center;
+        }
+
+        #lightbox img {
+            max-width: 90%;
+            max-height: 90%;
+            border-radius: 15px;
+        }
     </style>
 </head>
 
@@ -282,6 +302,11 @@
         </div>
     </section>
 
+    <!-- Lightbox -->
+    <div id="lightbox" onclick="closeLightbox()">
+        <img id="lightbox-img" src="" alt="Large view">
+    </div>
+
     <script>
         // Funkcija za interaktivne sekcije
         function showSection(id) {
@@ -310,6 +335,22 @@
                 div.style.display = 'none';
             }
         }
+
+        // Lightbox funkcionalnost
+        const lightbox = document.getElementById('lightbox');
+        const lightboxImg = document.getElementById('lightbox-img');
+
+        document.querySelectorAll('.gallery img').forEach(img => {
+            img.addEventListener('click', () => {
+                lightbox.style.display = 'flex';
+                lightboxImg.src = img.src;
+            });
+        });
+
+        function closeLightbox() {
+            lightbox.style.display = 'none';
+        }
+
     </script>
 
 </body>
