@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="hr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Da mores gledat zivotinje</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Pacifico&display=swap');
+
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #fff0f6;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Pozadina srca */
+        .heart-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .heart-bg span {
+            position: absolute;
+            font-size: 20px;
+            color: rgba(255, 182, 193, 0.2);
+            animation: float 20s linear infinite;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(100vh) rotate(0deg);
+            }
+
+            100% {
+                transform: translateY(-10vh) rotate(360deg);
+            }
+        }
+
+        header {
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            padding: 20px 30px;
+            font-family: 'Pacifico', cursive;
+            font-size: 32px;
+            color: #d63384;
+            position: relative;
+            z-index: 1;
+        }
+
+        h1 {
+            text-align: center;
+            padding: 10px 0 20px 0;
+            color: #d63384;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Navigacija */
+        .nav {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin-bottom: 30px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .nav button {
+            padding: 10px 25px;
+            background-color: #ffb6c1;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 16px;
+            color: #fff;
+            transition: background-color 0.3s, transform 0.3s;
+        }
+
+        .nav button:hover {
+            background-color: #ff69b4;
+            transform: scale(1.1);
+        }
+
+        section {
+            display: none;
+            max-width: 1200px;
+            margin: auto;
+            padding-bottom: 50px;
+            position: relative;
+            z-index: 1;
+            opacity: 0;
+            transition: opacity 0.5s ease-in-out;
+        }
+
+        section.active {
+            display: block;
+            opacity: 1;
+        }
+
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            padding: 10px 20px;
+        }
+
+        .gallery img {
+            width: 100%;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s, box-shadow 0.3s;
+            cursor: pointer;
+        }
+
+        /* Hover i tap efekt, ali ne blokira klik */
+        .gallery img:hover,
+        .gallery img:active {
+            transform: scale(1.08) rotate(-1deg);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Bočna tipka "Upri ovo" */
+        #uprioDiv {
+            position: fixed;
+            top: 50%;
+            right: 0;
+            transform: translateY(-50%);
+            z-index: 2;
+        }
+
+        #uprioDiv button {
+            writing-mode: vertical-rl;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 10px 0 0 10px;
+            background-color: #ff69b4;
+            color: white;
+            font-family: 'Pacifico', cursive;
+            font-size: 18px;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.3s;
+        }
+
+        #uprioDiv button:hover {
+            background-color: #ff1493;
+            transform: scale(1.05);
+        }
+
+        /* Popup div */
+        #uprioContent {
+            display: none;
+            position: fixed;
+            top: 50%;
+            right: 60px;
+            transform: translateY(-50%);
+            background-color: white;
+            padding: 15px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            z-index: 2;
+            text-align: center;
+            max-width: 300px;
+            animation: fadeIn 0.5s ease forwards;
+        }
+
+        @keyframes fadeIn {
+            0% {
+                opacity: 0;
+                transform: translateY(-50%) translateX(20px);
+            }
+
+            100% {
+                opacity: 1;
+                transform: translateY(-50%) translateX(0);
+            }
+        }
+
+        /* Lightbox */
+        #lightbox {
+            display: none;
+            position: fixed;
+            z-index: 10;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            justify-content: center;
+            align-items: center;
+        }
+
+        #lightbox img {
+            max-width: 95%;
+            max-height: 95%;
+            border-radius: 15px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>Lucija Gica</header>
+    <h1>Da mores gledat zivotinje</h1>
+
+    <div class="nav">
+        <button onclick="showSection('gice')">Gice</button>
+        <button onclick="showSection('psi')">Psi</button>
+        <button onclick="showSection('zirafe')">Zirafe</button>
+        <button onclick="showSection('rakuni')">Rakuni</button>
+    </div>
+
+    <!-- Pozadina srca -->
+    <div class="heart-bg" id="hearts"></div>
+
+    <!-- Bočna tipka i popup -->
+    <div id="uprioDiv">
+        <button onclick="toggleUpri()">Upri ovo</button>
+    </div>
+
+    <div id="uprioContent">
+        <img src="https://i.imgur.com/9Qu3L2l.jpeg" alt="Doktor" style="width:100%; border-radius:15px;">
+        <p style="font-family:'Pacifico', cursive; font-size:22px; color:#d63384; margin-top:10px;">Ko je doktor</p>
+    </div>
+
+    <!-- Sekcije galerije -->
+    <section id="gice" class="active">
+        <div class="gallery">
+            <img src="https://i.pinimg.com/236x/2c/5c/81/2c5c810235cdcfb08d9d4d43225374c5.jpg" alt="Gica 1">
+            <img src="https://i.pinimg.com/474x/8e/2d/cd/8e2dcd950a95ce6c44f06c61038b87ad.jpg" alt="Gica 2">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSVyeu27xc5hWAm_FaBa18nlgtsnHQE0ySe0A&s" alt="Gica 3">
+            <img src="https://i.pinimg.com/736x/d4/6f/ed/d46fed16acf0fd01695ad1c948412e22.jpg" alt="Gica 4">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ5pTrPrEMw9t2A8dKFFqY9jPX7HI1ENN_4rw&s" alt="Gica 5">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT59C1eNIHGCyclv3FHXH_MM8ijP1svxYbJ7A&s" alt="Gica 6">
+            <img src="https://i.pinimg.com/474x/69/4d/2f/694d2f882c1f6441f57c8fcf728af9ea.jpg" alt="Gica 7">
+            <img src="https://i.pinimg.com/474x/ff/bc/30/ffbc30f6c2b08c2b6c0c4f2f3c1ab5bc.jpg" alt="Gica 8">
+        </div>
+    </section>
+
+    <section id="psi">
+        <div class="gallery">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRxly9XBqXTs3XQzKZR7IyLVqQ7dvGWsq8Z0A&s" alt="Pas 1">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTFY-UKzbdau2S-_HA5CD5aDVpnzm-2SExrFA&s" alt="Pas 2">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSZb_J7oF8A1IJr9BF6bjClxw4E4lFVNB3WiA&s" alt="Pas 3">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRX-geHcP6jb4uQRXRbsJpLSJkUYRyP0B1-Tw&s" alt="Pas 4">
+            <img src="https://i.pinimg.com/736x/10/aa/4a/10aa4a0d8a767f977d1cf3c1fa482376.jpg" alt="Pas 5">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRXsl9gvWI86N2IBuMnP02Aa72gc5MmR9t7ug&s" alt="Pas 6">
+            <img src="https://i.pinimg.com/474x/52/48/1b/52481b80c4c65c4c0e0b5c6c7a36b2d1.jpg" alt="Pas 7">
+            <img src="https://i.pinimg.com/474x/11/3d/ea/113dea0a5f7e42b68e71c7f3f8b8c8f2.jpg" alt="Pas 8">
+        </div>
+    </section>
+
+    <section id="zirafe">
+        <div class="gallery">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSFHucXuxXl2E10CGseUD4SlsZIm-Vu-_eiwg&s" alt="Zirafa 1">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQewaZ4_W6PKsWKnPnygQeYMHoRxba_ulmN4w&s" alt="Zirafa 2">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ6c1ouAXe4HY3V2HOfCxLH6oOhe50mUBq2kA&s" alt="Zirafa 3">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSnvNo9oHGCHUnS5Ai63JOZElmYm1wML-VBRg&s" alt="Zirafa 4">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSnvNo9oHGCHUnS5Ai63JOZElmYm1wML-VBRg&s" alt="Zirafa 5">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSXHfoSbwhX2R18d0Cz-qtEuIoiT96_NjkSJA&s" alt="Zirafa 6">
+            <img src="https://i.pinimg.com/474x/0a/1b/34/0a1b34e0c91d3b9c1f2e0f4c2e5c7c45.jpg" alt="Zirafa 7">
+            <img src="https://i.pinimg.com/474x/45/6f/2d/456f2d6f8a1b9d3e8f4e5c6f7b8d9a1b.jpg" alt="Zirafa 8">
+        </div>
+    </section>
+
+    <section id="rakuni">
+        <div class="gallery">
+            <img src="https://i.pinimg.com/736x/0c/30/08/0c3008d0f7d1c9960d4196276364bd5f.jpg" alt="Rakun 1">
+            <img src="https://i.pinimg.com/originals/aa/03/8a/aa038ad699137dce598457ca8e1e1dd8.png" alt="Rakun 2">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSWgLfANM5r3P7fQiS5ZrMphmii0wdCTepTJw&s" alt="Rakun 3">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQJ6njVSoIlvq7ETi7XuyN-g5wypLePK7XU3A&s" alt="Rakun 4">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSDCU4xwn99a-plw6eBYdABEwFaQ24O2Ej22g&s" alt="Rakun 5">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTEi3yDwZ7UcoZyrUEOy0upL4PqZUAELcMMhw&s" alt="Rakun 6">
+            <img src="https://i.pinimg.com/474x/2b/7d/4c/2b7d4c3a1b4c6a8f5d7b8c9a1e2d3f4c.jpg" alt="Rakun 7">
+            <img src="https://i.pinimg.com/474x/1c/5f/2d/1c5f2d6a7b8c9d1e2f3a4b5c6d7e8f9a.jpg" alt="Rakun 8">
+        </div>
+    </section>
+
+    <!-- Lightbox -->
+    <div id="lightbox" onclick="closeLightbox()">
+        <img id="lightbox-img" src="" alt="Large view">
+    </div>
+
+    <script>
+        // Sekcije
+        function showSection(id) {
+            document.querySelectorAll('section').forEach(sec => sec.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+        }
+
+        // Srca
+        const heartContainer = document.getElementById('hearts');
+        for (let i = 0; i < 40; i++) {
+            const span = document.createElement('span');
+            span.innerText = '❤';
+            span.style.left = Math.random() * 100 + 'vw';
+            span.style.fontSize = 10 + Math.random() * 20 + 'px';
+            span.style.animationDuration = 10 + Math.random() * 20 + 's';
+            heartContainer.appendChild(span);
+        }
+
+        // Bočna tipka
+        function toggleUpri() {
+            const div = document.getElementById('uprioContent');
+            div.style.display = (div.style.display === 'block') ? 'none' : 'block';
+        }
+
+        // Lightbox
+        const lightbox = document.getElementById('lightbox');
+        const lightboxImg = document.getElementById('lightbox-img');
+        document.querySelectorAll('.gallery img').forEach(img => {
+            img.addEventListener('click', () => {
+                lightbox.style.display = 'flex';
+                lightboxImg.src = img.src;
+            });
+        });
+        function closeLightbox() {
+            lightbox.style.display = 'none';
+        }
+    </script>
+
+</body>
+
+</html>
