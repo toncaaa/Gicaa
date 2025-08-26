@@ -127,6 +127,62 @@
             transform: scale(1.05);
             box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
         }
+
+        /* Bočna tipka "Upri ovo" */
+        #uprioDiv {
+            position: fixed;
+            top: 50%;
+            right: 0;
+            transform: translateY(-50%);
+            z-index: 2;
+        }
+
+        #uprioDiv button {
+            writing-mode: vertical-rl;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 10px 0 0 10px;
+            background-color: #ff69b4;
+            color: white;
+            font-family: 'Pacifico', cursive;
+            font-size: 18px;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.3s;
+        }
+
+        #uprioDiv button:hover {
+            background-color: #ff1493;
+            transform: scale(1.05);
+        }
+
+        /* Popup div */
+        #uprioContent {
+            display: none;
+            position: fixed;
+            top: 50%;
+            right: 60px;
+            transform: translateY(-50%);
+            background-color: white;
+            padding: 15px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            z-index: 2;
+            text-align: center;
+            max-width: 300px;
+            animation: fadeIn 0.5s ease forwards;
+        }
+
+        @keyframes fadeIn {
+            0% {
+                opacity: 0;
+                transform: translateY(-50%) translateX(20px);
+            }
+
+            100% {
+                opacity: 1;
+                transform: translateY(-50%) translateX(0);
+            }
+        }
     </style>
 </head>
 
@@ -145,6 +201,16 @@
     <!-- Pozadina srca -->
     <div class="heart-bg" id="hearts"></div>
 
+    <!-- Bočna tipka i popup -->
+    <div id="uprioDiv">
+        <button onclick="toggleUpri()">Upri ovo</button>
+    </div>
+
+    <div id="uprioContent">
+        <img src="https://i.imgur.com/9Qu3L2l.jpeg" alt="Doktor" style="width:100%; border-radius:15px;">
+        <p style="font-family:'Pacifico', cursive; font-size:22px; color:#d63384; margin-top:10px;">Ko je doktor</p>
+    </div>
+
     <!-- Sekcije galerije -->
     <section id="gice" class="active">
         <div class="gallery">
@@ -157,7 +223,6 @@
                 alt="Gica 5">
             <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT59C1eNIHGCyclv3FHXH_MM8ijP1svxYbJ7A&s"
                 alt="Gica 6">
-            <!-- Dodano jos slika za veci izgled -->
             <img src="https://i.pinimg.com/474x/69/4d/2f/694d2f882c1f6441f57c8fcf728af9ea.jpg" alt="Gica 7">
             <img src="https://i.pinimg.com/474x/ff/bc/30/ffbc30f6c2b08c2b6c0c4f2f3c1ab5bc.jpg" alt="Gica 8">
         </div>
@@ -234,6 +299,16 @@
             span.style.fontSize = 10 + Math.random() * 20 + 'px';
             span.style.animationDuration = 10 + Math.random() * 20 + 's';
             heartContainer.appendChild(span);
+        }
+
+        // Toggle funkcija za bočnu tipku
+        function toggleUpri() {
+            const div = document.getElementById('uprioContent');
+            if (div.style.display === 'none' || div.style.display === '') {
+                div.style.display = 'block';
+            } else {
+                div.style.display = 'none';
+            }
         }
     </script>
 
