@@ -17,7 +17,7 @@
             position: relative;
         }
 
-        /* Pozadina srca */
+        /* Srca */
         .heart-bg {
             position: fixed;
             top: 0;
@@ -45,6 +45,7 @@
             }
         }
 
+        /* Header */
         header {
             display: flex;
             justify-content: flex-start;
@@ -53,7 +54,6 @@
             font-family: 'Pacifico', cursive;
             font-size: 32px;
             color: #d63384;
-            position: relative;
             z-index: 1;
         }
 
@@ -61,7 +61,6 @@
             text-align: center;
             padding: 10px 0 20px 0;
             color: #d63384;
-            position: relative;
             z-index: 1;
         }
 
@@ -72,7 +71,6 @@
             gap: 20px;
             flex-wrap: wrap;
             margin-bottom: 30px;
-            position: relative;
             z-index: 1;
         }
 
@@ -84,7 +82,7 @@
             cursor: pointer;
             font-size: 16px;
             color: #fff;
-            transition: background-color 0.3s, transform 0.3s;
+            transition: 0.3s;
         }
 
         .nav button:hover {
@@ -92,15 +90,15 @@
             transform: scale(1.1);
         }
 
+        /* Sekcije */
         section {
             display: none;
             max-width: 1200px;
             margin: auto;
             padding-bottom: 50px;
-            position: relative;
             z-index: 1;
             opacity: 0;
-            transition: opacity 0.5s ease-in-out;
+            transition: 0.5s;
         }
 
         section.active {
@@ -108,6 +106,7 @@
             opacity: 1;
         }
 
+        /* Galerija */
         .gallery {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
@@ -119,17 +118,16 @@
             width: 100%;
             border-radius: 15px;
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-            transition: transform 0.3s, box-shadow 0.3s;
+            transition: 0.3s;
             cursor: pointer;
         }
 
-        .gallery img:hover,
-        .gallery img:active {
+        .gallery img:hover {
             transform: scale(1.08) rotate(-1deg);
             box-shadow: 0 12px 30px rgba(0, 0, 0, 0.3);
         }
 
-        /* Bočna tipka "Upri ovo" */
+        /* Bočna tipka */
         #uprioDiv {
             position: fixed;
             top: 50%;
@@ -148,7 +146,7 @@
             font-family: 'Pacifico', cursive;
             font-size: 18px;
             cursor: pointer;
-            transition: background-color 0.3s, transform 0.3s;
+            transition: 0.3s;
         }
 
         #uprioDiv button:hover {
@@ -156,7 +154,7 @@
             transform: scale(1.05);
         }
 
-        /* Popup div */
+        /* Popup sa slikom */
         #uprioContent {
             display: none;
             position: fixed;
@@ -167,22 +165,61 @@
             padding: 15px;
             border-radius: 15px;
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-            z-index: 2;
+            z-index: 3;
+            max-width: 250px;
             text-align: center;
-            max-width: 300px;
-            animation: fadeIn 0.5s ease forwards;
         }
 
-        @keyframes fadeIn {
-            0% {
-                opacity: 0;
-                transform: translateY(-50%) translateX(20px);
-            }
+        #uprioContent img {
+            width: 100%;
+            border-radius: 15px;
+            transition: 0.3s;
+        }
 
-            100% {
-                opacity: 1;
-                transform: translateY(-50%) translateX(0);
-            }
+        /* Strelice */
+        .arrow {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            width: 35px;
+            height: 35px;
+            background-color: rgba(255, 105, 180, 0.8);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: 0.3s;
+        }
+
+        .arrow:hover {
+            background-color: #ff1493;
+            transform: scale(1.1);
+        }
+
+        .arrow-left {
+            left: -45px;
+        }
+
+        .arrow-right {
+            right: -45px;
+        }
+
+        .arrow::before {
+            content: '';
+            display: block;
+            width: 12px;
+            height: 12px;
+            border-top: 3px solid white;
+            border-right: 3px solid white;
+        }
+
+        .arrow-left::before {
+            transform: rotate(-135deg);
+        }
+
+        .arrow-right::before {
+            transform: rotate(45deg);
         }
 
         /* Lightbox */
@@ -220,110 +257,90 @@
         <button onclick="showSection('ihhh')">Ihhh</button>
     </div>
 
-    <!-- Pozadina srca -->
     <div class="heart-bg" id="hearts"></div>
 
-    <!-- Bočna tipka i popup -->
     <div id="uprioDiv">
         <button onclick="toggleUpri()">Upri ovo</button>
     </div>
 
     <div id="uprioContent">
-        <img src="https://i.imgur.com/9Qu3L2l.jpeg" alt="Doktor" style="width:100%; border-radius:15px;">
+        <div class="arrow arrow-left" onclick="prevUpri()"></div>
+        <img id="uprioImg" src="https://i.imgur.com/9Qu3L2l.jpeg" alt="Doktor">
+        <div class="arrow arrow-right" onclick="nextUpri()"></div>
         <p style="font-family:'Pacifico', cursive; font-size:22px; color:#d63384; margin-top:10px;">Ko je doktor</p>
     </div>
 
-    <!-- Sekcije galerije -->
+    <!-- Galerije svih životinja (iste slike kao prije) -->
     <section id="gice" class="active">
         <div class="gallery">
-            <img src="https://i.pinimg.com/236x/2c/5c/81/2c5c810235cdcfb08d9d4d43225374c5.jpg" alt="Gica 1">
-            <img src="https://i.pinimg.com/474x/8e/2d/cd/8e2dcd950a95ce6c44f06c61038b87ad.jpg" alt="Gica 2">
-            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSVyeu27xc5hWAm_FaBa18nlgtsnHQE0ySe0A&s"
-                alt="Gica 3">
-            <img src="https://i.pinimg.com/736x/d4/6f/ed/d46fed16acf0fd01695ad1c948412e22.jpg" alt="Gica 4">
-            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ5pTrPrEMw9t2A8dKFFqY9jPX7HI1ENN_4rw&s"
-                alt="Gica 5">
-            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT59C1eNIHGCyclv3FHXH_MM8ijP1svxYbJ7A&s"
-                alt="Gica 6">
-            <img src="https://i.pinimg.com/474x/69/4d/2f/694d2f882c1f6441f57c8fcf728af9ea.jpg" alt="Gica 7">
-            <img src="https://i.pinimg.com/474x/ff/bc/30/ffbc30f6c2b08c2b6c0c4f2f3c1ab5bc.jpg" alt="Gica 8">
+            <img src="https://i.pinimg.com/236x/2c/5c/81/2c5c810235cdcfb08d9d4d43225374c5.jpg">
+            <img src="https://i.pinimg.com/474x/8e/2d/cd/8e2dcd950a95ce6c44f06c61038b87ad.jpg">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSVyeu27xc5hWAm_FaBa18nlgtsnHQE0ySe0A&s">
+            <img src="https://i.pinimg.com/736x/d4/6f/ed/d46fed16acf0fd01695ad1c948412e22.jpg">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ5pTrPrEMw9t2A8dKFFqY9jPX7HI1ENN_4rw&s">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT59C1eNIHGCyclv3FHXH_MM8ijP1svxYbJ7A&s">
+            <img src="https://i.pinimg.com/474x/69/4d/2f/694d2f882c1f6441f57c8fcf728af9ea.jpg">
+            <img src="https://i.pinimg.com/474x/ff/bc/30/ffbc30f6c2b08c2b6c0c4f2f3c1ab5bc.jpg">
         </div>
     </section>
 
     <section id="psi">
         <div class="gallery">
-            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRxly9XBqXTs3XQzKZR7IyLVqQ7dvGWsq8Z0A&s"
-                alt="Pas 1">
-            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTFY-UKzbdau2S-_HA5CD5aDVpnzm-2SExrFA&s"
-                alt="Pas 2">
-            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSZb_J7oF8A1IJr9BF6bjClxw4E4lFVNB3WiA&s"
-                alt="Pas 3">
-            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRX-geHcP6jb4uQRXRbsJpLSJkUYRyP0B1-Tw&s"
-                alt="Pas 4">
-            <img src="https://i.pinimg.com/736x/10/aa/4a/10aa4a0d8a767f977d1cf3c1fa482376.jpg" alt="Pas 5">
-            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRXsl9gvWI86N2IBuMnP02Aa72gc5MmR9t7ug&s"
-                alt="Pas 6">
-            <img src="https://i.pinimg.com/474x/52/48/1b/52481b80c4c65c4c0e0b5c6c7a36b2d1.jpg" alt="Pas 7">
-            <img src="https://i.pinimg.com/474x/11/3d/ea/113dea0a5f7e42b68e71c7f3f8b8c8f2.jpg" alt="Pas 8">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRxly9XBqXTs3XQzKZR7IyLVqQ7dvGWsq8Z0A&s">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTFY-UKzbdau2S-_HA5CD5aDVpnzm-2SExrFA&s">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSZb_J7oF8A1IJr9BF6bjClxw4E4lFVNB3WiA&s">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRX-geHcP6jb4uQRXRbsJpLSJkUYRyP0B1-Tw&s">
+            <img src="https://i.pinimg.com/736x/10/aa/4a/10aa4a0d8a767f977d1cf3c1fa482376.jpg">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRXsl9gvWI86N2IBuMnP02Aa72gc5MmR9t7ug&s">
+            <img src="https://i.pinimg.com/474x/52/48/1b/52481b80c4c65c4c0e0b5c6c7a36b2d1.jpg">
+            <img src="https://i.pinimg.com/474x/11/3d/ea/113dea0a5f7e42b68e71c7f3f8b8c8f2.jpg">
         </div>
     </section>
 
     <section id="zirafe">
         <div class="gallery">
-            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSFHucXuxXl2E10CGseUD4SlsZIm-Vu-_eiwg&s"
-                alt="Zirafa 1">
-            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQewaZ4_W6PKsWKnPnygQeYMHoRxba_ulmN4w&s"
-                alt="Zirafa 2">
-            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ6c1ouAXe4HY3V2HOfCxLH6oOhe50mUBq2kA&s"
-                alt="Zirafa 3">
-            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSnvNo9oHGCHUnS5Ai63JOZElmYm1wML-VBRg&s"
-                alt="Zirafa 4">
-            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSnvNo9oHGCHUnS5Ai63JOZElmYm1wML-VBRg&s"
-                alt="Zirafa 5">
-            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSXHfoSbwhX2R18d0Cz-qtEuIoiT96_NjkSJA&s"
-                alt="Zirafa 6">
-            <img src="https://i.pinimg.com/474x/0a/1b/34/0a1b34e0c91d3b9c1f2e0f4c2e5c7c45.jpg" alt="Zirafa 7">
-            <img src="https://i.pinimg.com/474x/45/6f/2d/456f2d6f8a1b9d3e8f4e5c6f7b8d9a1b.jpg" alt="Zirafa 8">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSFHucXuxXl2E10CGseUD4SlsZIm-Vu-_eiwg&s">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQewaZ4_W6PKsWKnPnygQeYMHoRxba_ulmN4w&s">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ6c1ouAXe4HY3V2HOfCxLH6oOhe50mUBq2kA&s">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSnvNo9oHGCHUnS5Ai63JOZElmYm1wML-VBRg&s">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSXHfoSbwhX2R18d0Cz-qtEuIoiT96_NjkSJA&s">
+            <img src="https://i.pinimg.com/474x/0a/1b/34/0a1b34e0c91d3b9c1f2e0f4c2e5c7c45.jpg">
+            <img src="https://i.pinimg.com/474x/45/6f/2d/456f2d6f8a1b9d3e8f4e5c6f7b8d9a1b.jpg">
         </div>
     </section>
 
     <section id="rakuni">
         <div class="gallery">
-            <img src="https://i.pinimg.com/736x/0c/30/08/0c3008d0f7d1c9960d4196276364bd5f.jpg" alt="Rakun 1">
-            <img src="https://i.pinimg.com/originals/aa/03/8a/aa038ad699137dce598457ca8e1e1dd8.png" alt="Rakun 2">
-            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSWgLfANM5r3P7fQiS5ZrMphmii0wdCTepTJw&s"
-                alt="Rakun 3">
-            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQJ6njVSoIlvq7ETi7XuyN-g5wypLePK7XU3A&s"
-                alt="Rakun 4">
-            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSDCU4xwn99a-plw6eBYdABEwFaQ24O2Ej22g&s"
-                alt="Rakun 5">
-            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTEi3yDwZ7UcoZyrUEOy0upL4PqZUAELcMMhw&s"
-                alt="Rakun 6">
-            <img src="https://i.pinimg.com/474x/2b/7d/4c/2b7d4c3a1b4c6a8f5d7b8c9a1e2d3f4c.jpg" alt="Rakun 7">
-            <img src="https://i.pinimg.com/474x/1c/5f/2d/1c5f2d6a7b8c9d1e2f3a4b5c6d7e8f9a.jpg" alt="Rakun 8">
+            <img src="https://i.pinimg.com/736x/0c/30/08/0c3008d0f7d1c9960d4196276364bd5f.jpg">
+            <img src="https://i.pinimg.com/originals/aa/03/8a/aa038ad699137dce598457ca8e1e1dd8.png">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSWgLfANM5r3P7fQiS5ZrMphmii0wdCTepTJw&s">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQJ6njVSoIlvq7ETi7XuyN-g5wypLePK7XU3A&s">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSDCU4xwn99a-plw6eBYdABEwFaQ24O2Ej22g&s">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTEi3yDwZ7UcoZyrUEOy0upL4PqZUAELcMMhw&s">
+            <img src="https://i.pinimg.com/474x/2b/7d/4c/2b7d4c3a1b4c6a8f5d7b8c9a1e2d3f4c.jpg">
+            <img src="https://i.pinimg.com/474x/1c/5f/2d/1c5f2d6a7b8c9d1e2f3a4b5c6d7e8f9a.jpg">
         </div>
     </section>
 
     <section id="ihhh">
         <div class="gallery">
-            <img src="https://i.imgur.com/FFGKUus.png" alt="Ihhh 1">
-            <img src="https://i.imgur.com/1qypatF.png" alt="Ihhh 2">
-            <img src="https://i.imgur.com/AV47UtX.png" alt="Ihhh 3">
-            <img src="https://i.imgur.com/hY1cIjI.png" alt="Ihhh 4">
-            <img src="https://i.imgur.com/eanxsOi.png" alt="Ihhh 5">
-            <img src="https://i.imgur.com/bOUY3ms.png" alt="Ihhh 6">
-            <img src="https://i.imgur.com/YP0cqra.png" alt="Ihhh 7">
-            <img src="https://i.imgur.com/L6D3tUb.png" alt="Ihhh 8">
+            <img src="https://i.imgur.com/FFGKUus.png">
+            <img src="https://i.imgur.com/1qypatF.png">
+            <img src="https://i.imgur.com/AV47UtX.png">
+            <img src="https://i.imgur.com/hY1cIjI.png">
+            <img src="https://i.imgur.com/eanxsOi.png">
+            <img src="https://i.imgur.com/bOUY3ms.png">
+            <img src="https://i.imgur.com/YP0cqra.png">
+            <img src="https://i.imgur.com/L6D3tUb.png">
         </div>
     </section>
 
     <!-- Lightbox -->
-    <div id="lightbox" onclick="closeLightbox()">
-        <img id="lightbox-img" src="" alt="Large view">
+    <div id="lightbox" onclick="this.style.display='none'">
+        <img id="lightbox-img" src="">
     </div>
 
     <script>
-        // Sekcije
         function showSection(id) {
             document.querySelectorAll('section').forEach(sec => sec.classList.remove('active'));
             document.getElementById(id).classList.add('active');
@@ -340,24 +357,31 @@
             heartContainer.appendChild(span);
         }
 
-        // Bočna tipka
+        // Popup "Upri ovo"
         function toggleUpri() {
             const div = document.getElementById('uprioContent');
             div.style.display = (div.style.display === 'block') ? 'none' : 'block';
         }
 
-        // Lightbox
-        const lightbox = document.getElementById('lightbox');
+        const upriImages = ['https://i.imgur.com/9Qu3L2l.jpeg', 'https://i.imgur.com/iJSW724.png'];
+        let upriIndex = 0;
+        function nextUpri() {
+            upriIndex = (upriIndex + 1) % upriImages.length;
+            document.getElementById('uprioImg').src = upriImages[upriIndex];
+        }
+        function prevUpri() {
+            upriIndex = (upriIndex - 1 + upriImages.length) % upriImages.length;
+            document.getElementById('uprioImg').src = upriImages[upriIndex];
+        }
+
+        // Lightbox za galeriju
         const lightboxImg = document.getElementById('lightbox-img');
         document.querySelectorAll('.gallery img').forEach(img => {
             img.addEventListener('click', () => {
-                lightbox.style.display = 'flex';
                 lightboxImg.src = img.src;
+                document.getElementById('lightbox').style.display = 'flex';
             });
         });
-        function closeLightbox() {
-            lightbox.style.display = 'none';
-        }
     </script>
 
 </body>
